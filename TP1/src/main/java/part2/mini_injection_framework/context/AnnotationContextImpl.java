@@ -1,9 +1,11 @@
 package part2.mini_injection_framework.context;
 
+import part2.mini_injection_framework.annotations.AutoWired;
 import part2.mini_injection_framework.annotations.Component;
 import part2.mini_injection_framework.core.BeanException;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -39,18 +41,16 @@ public class AnnotationContextImpl implements IContext {
                                 Component componentAnnotation = clazz.getAnnotation(Component.class);
                                 String compValue = componentAnnotation.value();
                                 Object instance = clazz.getDeclaredConstructor().newInstance();
-                                System.out.println(instance);
-                                System.out.println(beans.size());
                                 if(compValue.isEmpty()) beans.put(className, instance);
                                 else beans.put(compValue, instance);
-//
-//                                for (Field field:clazz.getDeclaredFields()) {
-//                                    if(field.isAnnotationPresent(AutoWired.class)){
-//                                        field.setAccessible(true);
-//                                        Object value = this.getBean(field.getType());
-//                                        field.set(instance,value);
-//                                    }
-//                                }
+
+                                for (Field field:clazz.getDeclaredFields()) {
+                                    if(field.isAnnotationPresent(AutoWired.class)){
+                                        field.setAccessible(true);
+                                        Object value = this.getBean(field.getType());
+                                        field.set(instance,value);
+                                    }
+                                }
                             }
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();

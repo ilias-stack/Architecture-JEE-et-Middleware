@@ -1,6 +1,6 @@
 package part2.metier;
 
-import part1.dao.IDao;
+import part2.dao.IDao;
 import part2.mini_injection_framework.annotations.AutoWired;
 import part2.mini_injection_framework.annotations.Component;
 
