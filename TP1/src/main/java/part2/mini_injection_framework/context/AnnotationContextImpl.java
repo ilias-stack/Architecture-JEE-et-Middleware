@@ -2,6 +2,7 @@ package part2.mini_injection_framework.context;
 
 import part2.mini_injection_framework.annotations.AutoWired;
 import part2.mini_injection_framework.annotations.Component;
+import part2.mini_injection_framework.annotations.Qualifier;
 import part2.mini_injection_framework.core.BeanException;
 
 import java.io.InputStream;
@@ -47,7 +48,14 @@ public class AnnotationContextImpl implements IContext {
                                 for (Field field:clazz.getDeclaredFields()) {
                                     if(field.isAnnotationPresent(AutoWired.class)){
                                         field.setAccessible(true);
-                                        Object value = this.getBean(field.getType());
+                                        Object value=null;
+                                        if(field.isAnnotationPresent(Qualifier.class)){
+                                            Qualifier qualifier = field.getAnnotation(Qualifier.class);
+                                            if(qualifier.value().isEmpty()) value = this.getBean(field.getType());
+                                            else value = this.getBean(qualifier.value());
+                                        }
+                                        else value = this.getBean(field.getType());
+
                                         field.set(instance,value);
                                     }
                                 }
