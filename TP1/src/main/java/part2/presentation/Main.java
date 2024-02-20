@@ -9,5 +9,6 @@ public class Main {
         IContext context = new AnnotationContextImpl("part2.dao","part2.metier");
         IMetier metier =(IMetier) context.getBean(IMetier.class);
         System.out.println(metier.calcul());
+
     }
 }

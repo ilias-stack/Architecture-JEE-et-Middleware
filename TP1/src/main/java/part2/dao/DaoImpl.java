@@ -2,7 +2,7 @@ package part2.dao;
 
 import part2.mini_injection_framework.annotations.Component;
 
-@Component("dao")
+@Component
 public class DaoImpl implements IDao {
     @Override
     public double getData() {

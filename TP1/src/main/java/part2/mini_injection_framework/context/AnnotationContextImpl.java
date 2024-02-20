@@ -6,7 +6,9 @@ import part2.mini_injection_framework.annotations.Qualifier;
 import part2.mini_injection_framework.core.BeanException;
 
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -25,6 +27,14 @@ public class AnnotationContextImpl implements IContext {
         }
     }
 
+    private int identifyConstructorIndex(Constructor<?>[] constructorList,Class<?>[] idealConstructor){
+        for (int i=0;i<constructorList.length;i++) {
+            var constructor = constructorList[i].getParameterTypes();
+            if(Arrays.equals(constructor, idealConstructor)) return i;
+        }
+        return 0;
+    }
+
     private void scanPackage(String packageName) throws BeanException{
         String packagePath = packageName.replace('.', '/');
         try {
@@ -38,13 +48,30 @@ public class AnnotationContextImpl implements IContext {
                         String className = packageName + "." + line.substring(0, line.lastIndexOf('.'));
                         try {
                             Class<?> clazz = Class.forName(className);
+                            // checking if is annotated with Component notation
                             if (clazz.isAnnotationPresent(Component.class)) {
                                 Component componentAnnotation = clazz.getAnnotation(Component.class);
                                 String compValue = componentAnnotation.value();
-                                Object instance = clazz.getDeclaredConstructor().newInstance();
+                                Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+                                Class<?>[] idealConstructor = {};
+                                Object[] parameters;
+                                Object instance = null;
+                                // Checking for the optimal constructor for constructor injection
+                                for (Constructor<?> item : constructors) {
+                                    var constructor = item.getParameterTypes();
+                                    if (constructor.length > idealConstructor.length) idealConstructor = constructor;
+                                }
+                                parameters = new Object[idealConstructor.length];
+                                for (int i=0;i< parameters.length;i++)
+                                    parameters[i] = this.getBean(idealConstructor[i]);
+
+                                instance = clazz.getDeclaredConstructors()[this.identifyConstructorIndex(constructors,idealConstructor)].newInstance(parameters);
+
+                                // Adding the bean based on class or name
                                 if(compValue.isEmpty()) beans.put(className, instance);
                                 else beans.put(compValue, instance);
 
+                                // Checking for Autowired fields
                                 for (Field field:clazz.getDeclaredFields()) {
                                     if(field.isAnnotationPresent(AutoWired.class)){
                                         field.setAccessible(true);
