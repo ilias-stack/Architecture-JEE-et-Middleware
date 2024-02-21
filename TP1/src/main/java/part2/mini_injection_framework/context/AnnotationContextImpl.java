@@ -9,17 +9,9 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Scanner;
 
-public class AnnotationContextImpl implements IContext {
-
-    private final HashMap<String, Object> beans = new HashMap<>();
-
-    @Override
-    public HashMap<String, Object> getAllBeans() {
-        return beans;
-    }
+public class AnnotationContextImpl extends BaseContext {
 
     public AnnotationContextImpl(String... basePackages) throws BeanException{
         for (String basePackage : basePackages) {
@@ -98,22 +90,5 @@ public class AnnotationContextImpl implements IContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Object getBean(Class<?> classType) throws BeanException {
-        for (Object instance : beans.values()) {
-            if (classType.isInstance(instance)) {
-                return instance;
-            }
-        }
-        throw new BeanException("Bean of this class was not found.");
-    }
-
-    @Override
-    public Object getBean(String beanName) throws BeanException {
-        Object instance = beans.get(beanName);
-        if (instance == null) throw new BeanException("Bean of with this name was not found.");
-        return instance;
     }
 }
