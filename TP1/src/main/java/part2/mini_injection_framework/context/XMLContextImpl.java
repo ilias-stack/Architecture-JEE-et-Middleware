@@ -1,29 +1,27 @@
 package part2.mini_injection_framework.context;
 
-import part2.mini_injection_framework.core.BeanException;
-
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
-import java.util.HashMap;
 
-public class XMLContextImpl implements IContext {
-    private final HashMap<String, Object> beans = new HashMap<>();
+public class XMLContextImpl extends BaseContext {
 
     public XMLContextImpl(String configLocation){
-        InputStream i = getClass().getClassLoader().getResourceAsStream(configLocation);
-
+        InputStream fileStream = getClass().getClassLoader().getResourceAsStream(configLocation);
+        if (fileStream!=null){
+            try {
+                this.handleXMLFile(fileStream);
+                return;
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        throw new RuntimeException("Configuration file location is not found inside resources");
     }
-    @Override
-    public HashMap<String, Object> getAllBeans()  {
-        return null;
-    }
 
-    @Override
-    public Object getBean(Class<?> classType) throws BeanException {
-        return null;
-    }
-
-    @Override
-    public Object getBean(String beanName) throws BeanException {
-        return null;
+    private void handleXMLFile(InputStream inputStream) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance();
+        Unmarshaller unmarshaller = context.createUnmarshaller();
     }
 }
