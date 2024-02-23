@@ -1,5 +1,7 @@
 package part2.mini_injection_framework.context;
 
+import part2.mini_injection_framework.core.Beans;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -21,7 +23,7 @@ public class XMLContextImpl extends BaseContext {
     }
 
     private void handleXMLFile(InputStream inputStream) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance();
+        JAXBContext context = JAXBContext.newInstance(Beans.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
     }
 }
