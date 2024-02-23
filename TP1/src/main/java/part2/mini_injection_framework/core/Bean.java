@@ -1,20 +1,17 @@
 package part2.mini_injection_framework.core;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
 
-@XmlRootElement
+@XmlRootElement(name = "bean")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Bean implements Serializable {
-    @XmlAnyAttribute
+    @XmlAttribute
     private String id;
-    @XmlAnyAttribute
+    @XmlAttribute
     private String className;
-    private List<Property> properties;
+    private List<Property> property;
 
     public String getId() {
         return id;
@@ -23,12 +20,11 @@ public class Bean implements Serializable {
         return className;
     }
     public List<Property> getProperties() {
-        return properties;
+        return property;
     }
     public void setAll(String id, String className, List<Property> properties) {
         this.id = id;
         this.className = className;
-        this.properties = properties;
+        this.property = properties;
     }
-    public Bean(){}
 }

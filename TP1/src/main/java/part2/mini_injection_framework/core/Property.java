@@ -1,17 +1,13 @@
 package part2.mini_injection_framework.core;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
-
-@XmlRootElement
+@XmlRootElement(name = "property")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Property implements Serializable {
-    @XmlAnyAttribute
+    @XmlAttribute
     private String name;
-    @XmlAnyAttribute
+    @XmlAttribute
     private String ref;
 
     public String getName() {

@@ -25,5 +25,7 @@ public class XMLContextImpl extends BaseContext {
     private void handleXMLFile(InputStream inputStream) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Beans.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
+        Beans allBeans = (Beans) unmarshaller.unmarshal(inputStream);
+        System.out.println(allBeans.getBeans().get(1).getProperties());
     }
 }

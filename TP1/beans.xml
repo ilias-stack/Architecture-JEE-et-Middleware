@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<beans>
+    <bean id="dao" className="part1.dao.DaoImpl"/>
+    <bean id="metier" className="part1.metier.MetierImpl">
+        <properties name="dao" ref="dao"/>
+    </bean>
+</beans>
