@@ -19,7 +19,7 @@ The injection can be based on two methods either you can create a .xml file insi
 Annotations provide a convenient way to define beans and manage dependencies within the framework. The following annotations are available:
 - @Component
 - @AutoWired
-- @Qualifier
+- @Qualifier  
 Each annotation has the same role as in spring.
 
 ### XMLFile
