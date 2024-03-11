@@ -18,7 +18,7 @@ public class Tp3Application {
     }
 
 
-    @Bean
+//    @Bean
     CommandLineRunner start(PatientRepository patientRepository) throws Exception {
         return args -> {
             patientRepository.save(new Patient(null,"Ilias",new Date(),false,19));

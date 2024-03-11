@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template1">
 <head>
     <meta charset="UTF-8">
     <title>Patients</title>
@@ -9,6 +9,7 @@
     </style>
 </head>
 <body>
+<div layout:fragment="content1">
     <div class="p-3">
         <div class="card">
             <div class="card-header">
@@ -36,7 +37,10 @@
                         <td th:text="${p.malade}" th:style="${p.malade ? 'color:red;' : 'color:green;'}"></td>
                         <td th:text="${p.socre}"></td>
                         <td>
-                            <a th:href="@{delete(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-danger">Delete</a>
+                            <a onclick="return confirm('Do you really want to delete this one?')" th:href="@{delete(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-danger">Delete</a>
+                        </td>
+                        <td>
+                            <a th:href="@{editPatient(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-outline-info">Edit</a>
                         </td>
                     </tr>
                     </tbody>
@@ -49,6 +53,6 @@
             </div>
         </div>
     </div>
-
+</div>
 </body>
 </html>
