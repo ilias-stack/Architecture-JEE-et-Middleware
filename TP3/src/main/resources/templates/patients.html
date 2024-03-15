@@ -13,7 +13,7 @@
     <div class="p-3">
         <div class="card">
             <div class="card-header">
-                <form style="display: flex;" method="get" th:action="@{index}">
+                <form style="display: flex;" method="get" th:action="@{/user/index}">
                     <input th:value="${keyword}" class="form-control" type="text" name="keyword" placeholder="Chercher des patients">
                     <button type="submit" class="btn btn-info m-2">Chercher</button>
                 </form>
@@ -36,11 +36,11 @@
                         <td th:text="${p.dateNaissance}"></td>
                         <td th:text="${p.malade}" th:style="${p.malade ? 'color:red;' : 'color:green;'}"></td>
                         <td th:text="${p.socre}"></td>
-                        <td>
-                            <a onclick="return confirm('Do you really want to delete this one?')" th:href="@{delete(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-danger">Delete</a>
+                        <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <a onclick="return confirm('Do you really want to delete this one?')" th:href="@{/admin/delete(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-danger">Delete</a>
                         </td>
-                        <td>
-                            <a th:href="@{editPatient(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-outline-info">Edit</a>
+                        <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <a th:href="@{/admin/editPatient(id=${p.id},pageNumber = ${currentPage} , keyword = ${keyword})}" class="btn btn-outline-info">Edit</a>
                         </td>
                     </tr>
                     </tbody>
