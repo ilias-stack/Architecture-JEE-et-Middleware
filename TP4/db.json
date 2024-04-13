@@ -1,0 +1,40 @@
+{
+  "products": [
+    {
+      "id": "324324",
+      "name": "Computeri",
+      "price": 2500,
+      "checked": false
+    },
+    {
+      "id": "2832432414",
+      "name": "Printer",
+      "price": 700,
+      "checked": true
+    },
+    {
+      "id": "22",
+      "name": "Phone",
+      "price": 1200,
+      "checked": false
+    },
+    {
+      "id": "324",
+      "name": "Computer",
+      "price": 3000,
+      "checked": false
+    },
+    {
+      "id": "3243",
+      "name": "Printer",
+      "price": 700,
+      "checked": true
+    },
+    {
+      "name": "pasta",
+      "price": 70,
+      "checked": false,
+      "id": "LXeImHD"
+    }
+  ]
+}
