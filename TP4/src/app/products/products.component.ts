@@ -4,6 +4,7 @@ import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { FormsModule } from '@angular/forms';
 import { error } from 'console';
+import { AppStateService } from '../services/app-state.service';
 
 @Component({
   selector: 'app-products',
@@ -13,10 +14,8 @@ import { error } from 'console';
   styleUrl: './products.component.css',
 })
 export class ProductsComponent implements OnInit {
-  editToggleIndex: number = -1;
-
   handleEditProduct(productIndex: number) {
-    const currentProduct = this.products[productIndex];
+    const currentProduct = this.appState.productsState.products[productIndex];
 
     console.log(productIndex);
     this.service.updateProduct(currentProduct).subscribe({
@@ -27,47 +26,58 @@ export class ProductsComponent implements OnInit {
       },
       error: (error) => console.log,
     });
-    this.editToggleIndex = -1;
+    this.appState.productsState.editToggleIndex = -1;
   }
 
   toggleEditProduct(i: number) {
-    this.editToggleIndex = i;
+    this.appState.productsState.editToggleIndex = i;
   }
 
   handleGotoPage(page: number) {
-    this.currentPage = page;
+    this.appState.productsState.currentPage = page;
     this.getProducts();
   }
 
-  keyword: string = '';
   handleDeleteProduct(product: Product) {
     this.service.deleteProduct(product).subscribe({
       next: (value) => {
-        this.products = this.products.filter((p) => p.id != product.id);
+        this.appState.productsState.products =
+          this.appState.productsState.products.filter(
+            (p) => p.id != product.id
+          );
       },
     });
   }
-  constructor(private service: ProductService) {}
-
-  PAGE_SIZE: number = 5;
-  currentPage: number = 1;
-  totalPages: number = 0;
+  constructor(
+    private service: ProductService,
+    public appState: AppStateService
+  ) {}
 
   getProducts() {
+    this.appState.setProductState({ status: 'LOADING' });
     this.service
-      .getProducts(this.keyword, this.currentPage, this.PAGE_SIZE)
+      .getProducts(
+        this.appState.productsState.keyword,
+        this.appState.productsState.currentPage,
+        this.appState.productsState.PAGE_SIZE
+      )
       .subscribe({
         next: (resp) => {
-          this.products = resp.body as Product[];
+          this.appState.productsState.products = resp.body as Product[];
           const totalProducts: number = parseInt(
             resp.headers.get('X-Total-Count')!
           );
-          this.totalPages = isNaN(totalProducts)
+          this.appState.productsState.totalProducts = totalProducts;
+          this.appState.productsState.totalPages = isNaN(totalProducts)
             ? 0
-            : Math.ceil(totalProducts / this.PAGE_SIZE);
+            : Math.ceil(totalProducts / this.appState.productsState.PAGE_SIZE);
+          this.appState.setProductState({ status: 'LOADED' });
         },
         error: (err) => {
-          console.log('error');
+          this.appState.setProductState({
+            status: 'ERROR',
+            errroMessage: err.message,
+          });
         },
       });
   }
@@ -81,5 +91,4 @@ export class ProductsComponent implements OnInit {
       next: (upProduct) => (product.checked = (upProduct as any).checked),
     });
   }
-  products: Array<Product> = [];
 }

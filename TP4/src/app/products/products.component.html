@@ -5,7 +5,7 @@
         <form (ngSubmit)="getProducts()">
           <input
             type="text"
-            [(ngModel)]="keyword"
+            [(ngModel)]="this.appState.productsState.keyword"
             name="keyword"
             class="p-1 m-3"
           />
@@ -23,24 +23,33 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of products; let i = index">
+          <tr
+            *ngFor="
+              let product of this.appState.productsState.products;
+              let i = index
+            "
+          >
             <td>
               <input
-                *ngIf="editToggleIndex == i"
+                *ngIf="this.appState.productsState.editToggleIndex == i"
                 type="text"
                 [value]="product.name"
                 [(ngModel)]="product.name"
               />
-              <p *ngIf="editToggleIndex != i">{{ product.name }}</p>
+              <p *ngIf="this.appState.productsState.editToggleIndex != i">
+                {{ product.name }}
+              </p>
             </td>
             <td>
               <input
-                *ngIf="editToggleIndex == i"
+                *ngIf="this.appState.productsState.editToggleIndex == i"
                 type="number"
                 [value]="product.price"
                 [(ngModel)]="product.price"
               />
-              <p *ngIf="editToggleIndex != i">{{ product.price }}</p>
+              <p *ngIf="this.appState.productsState.editToggleIndex != i">
+                {{ product.price }}
+              </p>
             </td>
             <td>
               <button
@@ -63,18 +72,22 @@
             <td>
               <button
                 (click)="
-                  i != editToggleIndex
+                  i != this.appState.productsState.editToggleIndex
                     ? toggleEditProduct(i)
                     : handleEditProduct(i)
                 "
                 [class]="
-                  i == editToggleIndex
+                  i == this.appState.productsState.editToggleIndex
                     ? 'btn btn-outline-success'
                     : 'btn btn-outline-info'
                 "
               >
                 <i
-                  [class]="i == editToggleIndex ? 'bi bi-save' : 'bi bi-pencil'"
+                  [class]="
+                    i == this.appState.productsState.editToggleIndex
+                      ? 'bi bi-save'
+                      : 'bi bi-pencil'
+                  "
                 ></i>
               </button>
             </td>
@@ -82,10 +95,15 @@
         </tbody>
       </table>
       <ul class="nav nav-pills">
-        <li *ngFor="let page of [].constructor(this.totalPages); let i = index">
+        <li
+          *ngFor="
+            let page of [].constructor(this.appState.productsState.totalPages);
+            let i = index
+          "
+        >
           <button
             [ngClass]="
-              currentPage == i + 1
+              this.appState.productsState.currentPage == i + 1
                 ? 'btn btn-success m-1'
                 : 'btn btn-outline-success m-1'
             "

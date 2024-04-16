@@ -2,8 +2,8 @@
   "products": [
     {
       "id": "324324",
-      "name": "Computeri",
-      "price": 2500,
+      "name": "Computer",
+      "price": 25000,
       "checked": false
     },
     {
@@ -16,7 +16,7 @@
       "id": "22",
       "name": "Phone",
       "price": 1200,
-      "checked": false
+      "checked": true
     },
     {
       "id": "324",
@@ -28,7 +28,7 @@
       "id": "3243",
       "name": "Printer",
       "price": 700,
-      "checked": true
+      "checked": false
     },
     {
       "name": "pasta",
