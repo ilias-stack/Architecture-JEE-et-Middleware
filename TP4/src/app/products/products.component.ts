@@ -54,7 +54,6 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   getProducts() {
-    this.appState.setProductState({ status: 'LOADING' });
     this.service
       .getProducts(
         this.appState.productsState.keyword,
@@ -71,12 +70,11 @@ export class ProductsComponent implements OnInit {
           this.appState.productsState.totalPages = isNaN(totalProducts)
             ? 0
             : Math.ceil(totalProducts / this.appState.productsState.PAGE_SIZE);
-          this.appState.setProductState({ status: 'LOADED' });
         },
-        error: (err) => {
+        error: (err: Error) => {
           this.appState.setProductState({
             status: 'ERROR',
-            errroMessage: err.message,
+            errroMessage: err.name,
           });
         },
       });

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AppStateService } from '../services/app-state.service';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,12 @@ export class NavbarComponent {
     this.currentAction = action;
   }
 
-  constructor(public appState: AppStateService) {}
+  isLoading!: boolean;
+
+  constructor(
+    public appState: AppStateService,
+    public loadingService: LoadingService
+  ) {}
 
   actions: Array<any> = [
     { title: 'Home', route: '/home', icon: 'house' },
