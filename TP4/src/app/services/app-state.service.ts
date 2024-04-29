@@ -17,8 +17,19 @@ export class AppStateService {
     errorMessage: '',
   };
 
+  public authState: any = {
+    username: undefined,
+    roles: undefined,
+    isAuthenticated: false,
+    token: undefined,
+  };
+
   public setProductState(state: any): void {
     this.productsState = { ...this.productsState, ...state };
+  }
+
+  public setAuthState(state: any): void {
+    this.authState = { ...this.authState, ...state };
   }
 
   constructor() {}

@@ -13,6 +13,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AppErrorsComponent } from './app-errors/app-errors.component';
 import { AppHttpInterceptor } from './services/app-http.interceptor';
+import { LoginComponent } from './login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AdminTemplateComponent } from './admin-template/admin-template.component';
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 @NgModule({
   declarations: [
@@ -20,8 +24,17 @@ import { AppHttpInterceptor } from './services/app-http.interceptor';
     DashboardComponent,
     NavbarComponent,
     AppErrorsComponent,
+    LoginComponent,
+    AdminTemplateComponent,
+    NotAuthorizedComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, CommonModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    CommonModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   providers: [
     provideClientHydration(),
     ProductService,

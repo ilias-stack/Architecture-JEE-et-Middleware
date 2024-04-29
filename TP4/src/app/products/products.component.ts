@@ -30,7 +30,8 @@ export class ProductsComponent implements OnInit {
   }
 
   toggleEditProduct(i: number) {
-    this.appState.productsState.editToggleIndex = i;
+    if (this.appState.authState.roles.includes('ADMIN'))
+      this.appState.productsState.editToggleIndex = i;
   }
 
   handleGotoPage(page: number) {
