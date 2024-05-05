@@ -1,0 +1,36 @@
+<div class="mt-2 d-flex justify-content-center">
+  <div class="card w-75">
+    <ng-container *ngIf="!errorMessage;else errormsg">
+      <div *ngIf="customer">
+        <div class="card-header">Bank Accounts of customer <b>{{customer.name}}</b></div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <th>Id</th>
+              <th>Balance</th>
+              <th>Creation Date</th>
+              <th>Status</th>
+              <th>Type</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let acc of accounts">
+                <td> {{acc.id}}</td>
+                <td> {{acc.balance | number:'1.2-2'}}</td>
+                <td> {{acc.createdAt | date : 'dd/mm/yyyy'}}</td>
+                <td> {{acc.status}}</td>
+                <td> {{acc.type}}</td>
+                <td><button (click)="gotoOperations(acc.id)" class="btn">
+                  <i class="bi bi-coin"></i>
+                </button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p *ngIf="!customer">Loading...</p>
+    </ng-container>
+    <ng-template #errormsg>
+      <div class="alert alert-danger">{{errorMessage}}</div>
+    </ng-template>
+  </div>
+</div>

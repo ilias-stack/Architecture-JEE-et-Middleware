@@ -1,9 +1,8 @@
 package org.sid.ebankingbackend.web;
 
 
-import org.sid.ebankingbackend.dtos.AccountHistoryDTO;
-import org.sid.ebankingbackend.dtos.AccountOperationDTO;
-import org.sid.ebankingbackend.dtos.BankAccountDTO;
+import org.sid.ebankingbackend.dtos.*;
+import org.sid.ebankingbackend.exceptions.BalanceNotSufficientException;
 import org.sid.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.sid.ebankingbackend.service.BankAccountService;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +29,11 @@ public class BankAccountRestController {
         return bankAccountService.bankAccountList();
     }
 
+    @GetMapping("/accounts/{customerId}/accounts")
+    public List<BankAccountDTO> getAccounts(@PathVariable Long customerId){
+        return bankAccountService.getCustomerAccounts(customerId);
+    }
+
     @GetMapping("/accounts/{accountId}/operations")
     public List<AccountOperationDTO> getHistory(@PathVariable String accountId){
         return bankAccountService.accountHistory(accountId);
@@ -41,6 +45,23 @@ public class BankAccountRestController {
                                                @RequestParam(name = "size",defaultValue = "10") int size
                                                        ) throws BankAccountNotFoundException {
         return bankAccountService.getAccountHistory(accountId,page,size);
+    }
+
+    @PostMapping("/accounts/debit")
+    public DebitDTO debit(@RequestBody DebitDTO debitDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.debit(debitDTO.getAccountId(),debitDTO.getAmount(), debitDTO.getDescription());
+        return debitDTO;
+    }
+
+    @PostMapping("/accounts/credit")
+    public CreditDTO debit(@RequestBody CreditDTO creditDTO) throws BankAccountNotFoundException {
+        this.bankAccountService.credit(creditDTO.getAccountId(),creditDTO.getAmount(), creditDTO.getDescription());
+        return creditDTO;
+    }
+
+    @PostMapping("/accounts/transfer")
+    public void transfer(@RequestBody TransferRequestDTO transferRequestDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.transfer(transferRequestDTO.getAccountSource(), transferRequestDTO.getAccountDestination(), transferRequestDTO.getAmount());
     }
 
 }

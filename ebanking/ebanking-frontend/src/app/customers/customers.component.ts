@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {CustomerService} from "../services/customer.service";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {Customer} from "../models/customer.model";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
+import {Data} from "../models/data";
 
 
 @Component({
@@ -16,7 +16,7 @@ export class CustomersComponent implements OnInit{
   customers!:Observable<Customer[]>;
   errorMessage:string|undefined;
   searchFormGroup!:FormGroup;
-  constructor(private customerService:CustomerService,private fb:FormBuilder) {
+  constructor(private customerService:CustomerService,private fb:FormBuilder,private router:Router) {
   }
   ngOnInit(): void {
     this.searchFormGroup = this.fb.group({keyword:this.fb.control("")});
@@ -40,6 +40,12 @@ export class CustomersComponent implements OnInit{
       },
       error:error=>console.log(error)
 
+    })
+  }
+
+  handleCustomerAccounts(customer : Customer) {
+    this.router.navigateByUrl("/customer-accounts/"+customer.id,{
+      state:customer
     })
   }
 }

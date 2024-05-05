@@ -1,1 +1,91 @@
-<p>accounts works!</p>
+<div class="container mt-2">
+  <div class="row">
+
+    <div [ngClass]="account$!=undefined?'col-md-7':'col-md-9'">
+      <div class="card">
+        <div class="card-header">Accounts</div>
+        <div class="card-body">
+          <form [formGroup]="accountFormGroup" (ngSubmit)="handleSearchAccount()">
+            <div class="input-group">
+              <label class="input-group-text">AccountId</label>
+              <input type="text" class="form-control" formControlName="accountId">
+              <button class="btn btn-outline-info">Search</button>
+            </div>
+          </form>
+          <ng-template #errorTemplate>
+            <div class="text-danger" *ngIf="errorMessage">{{errorMessage}}</div>
+          </ng-template>
+          <ng-container *ngIf="account$ | async as accountDetails; else errorTemplate">
+            <div class="m-2">
+              <label>ID : </label>
+              <label><strong>{{accountDetails.accountId}}</strong></label>
+            </div>
+            <div class="m-2">
+              <label>Balance : </label>
+              <label><strong>{{accountDetails.balance | number : '1.2-2'}}</strong></label>
+            </div>
+            <hr>
+            <table class="table">
+              <thead>
+                <th>ID</th><th>Date</th><th>Amount</th><th>Type</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let op of accountDetails.accountOperationDTOS">
+                  <td>{{op.id}}</td>
+                  <td>{{op.operationDate | date: 'dd/mm/yyyy'}}</td>
+                  <td>{{op.amount | number : '1.2-2'}}</td>
+                  <td class="text-end">{{op.type}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <ul class="nav nav-pills">
+              <li *ngFor="let p of [].constructor(accountDetails.totalPages); let i=index">
+                <a (click)="gotoPage(i)" class="btn ms-1" [ngClass]="i!==currentPage ? 'btn-outline-info' : 'btn-info'">{{i+1}}</a>
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col col-md-5" *ngIf="account$">
+      <div class="card">
+        <div class="card-header">Operations</div>
+        <div class="card-body">
+          <form method="post" [formGroup]="operationFormGroup" (ngSubmit)="handleAccountOperation()">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">Debit</label>
+              <input class="form-check-input" type="radio" formControlName="type" value="DEBIT" >
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">Credit</label>
+              <input class="form-check-input" type="radio" formControlName="type" value="CREDIT" >
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">Transfer</label>
+              <input class="form-check-input" type="radio" formControlName="type" value="TRANSFER">
+            </div>
+            <div class="mt-2 mb-3" *ngIf="operationFormGroup.value.type=='TRANSFER'">
+              <label class="form-label">Destination Acc :</label>
+              <input type="text" formControlName="accountDestination" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Amount :</label>
+              <input type="number" formControlName="amount" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description :</label>
+              <input type="text" formControlName="description" class="form-control">
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-success">Save operation</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

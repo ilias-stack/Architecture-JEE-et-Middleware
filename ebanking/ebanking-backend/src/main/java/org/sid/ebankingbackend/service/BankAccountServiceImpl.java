@@ -139,6 +139,15 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
+    public List<BankAccountDTO> getCustomerAccounts(Long customerId){
+        return bankAccountRepository.findBankAccountByCustomer_Id(customerId)
+                .stream().map(bankAccount -> {
+                    if(bankAccount instanceof SavingAccount) return mapper.fromSavingBankAccount((SavingAccount) bankAccount);
+                    else return mapper.fromCurrentBankAccount((CurrentAccount) bankAccount);
+                }).collect(Collectors.toList());
+    }
+
+    @Override
     public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException {
         return mapper.
                 fromCustomer(customerRepository.
@@ -168,7 +177,7 @@ public class BankAccountServiceImpl implements BankAccountService{
     @Override
     public AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException {
         BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(() -> new BankAccountNotFoundException("No corresponding bank account"));
-        Page<AccountOperation> accountOperationPage = accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page, size));
+        Page<AccountOperation> accountOperationPage = accountOperationRepository.findByBankAccountIdOrderByOperationDateDesc(accountId, PageRequest.of(page, size));
         AccountHistoryDTO accountHistoryDTO = new AccountHistoryDTO();
         accountHistoryDTO.setAccountOperationDTOS(accountOperationPage
                 .getContent().stream()

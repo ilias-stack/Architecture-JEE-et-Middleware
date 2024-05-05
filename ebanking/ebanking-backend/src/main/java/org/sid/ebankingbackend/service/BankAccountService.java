@@ -30,6 +30,8 @@ public interface BankAccountService {
 
     List<BankAccountDTO> bankAccountList();
 
+    List<BankAccountDTO> getCustomerAccounts(Long customerId);
+
     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
 
     CustomerDTO updateCustomer(CustomerDTO customerDTO);
