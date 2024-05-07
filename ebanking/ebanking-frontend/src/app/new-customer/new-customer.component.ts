@@ -25,9 +25,6 @@ export class NewCustomerComponent implements OnInit{
 
 
   handleSaveCustomer() {
-    let conf = confirm("Do you really want to delete this customer ?");
-    if(!conf)return;
-
     const customer:Customer = this.newCustomerFormGroup.value;
 
     this.customerService.saveCustomer(customer).subscribe({
@@ -38,7 +35,6 @@ export class NewCustomerComponent implements OnInit{
       },
       error:error=>
         console.log(error.message)
-
     })
 
   }

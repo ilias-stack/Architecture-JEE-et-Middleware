@@ -1,6 +1,7 @@
 package org.sid.ebankingbackend.security;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import org.sid.ebankingbackend.entities.Customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +25,12 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -54,6 +59,7 @@ public class SecurityConfig {
         return httpSecurity
                 .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
                 .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
 //                .httpBasic(Customizer.withDefaults())
@@ -78,6 +84,18 @@ public class SecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         return new ProviderManager(daoAuthenticationProvider);
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration=new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+
+        UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",corsConfiguration);
+        return source;
     }
 
 }

@@ -49,6 +49,6 @@ export class CustomerAccountsComponent implements OnInit{
 
   gotoOperations(id: string) {
     let data: Data = { id: id } ;
-    this.router.navigateByUrl("/accounts",{state:data})
+    this.router.navigateByUrl("/admin/accounts",{state:data})
   }
 }

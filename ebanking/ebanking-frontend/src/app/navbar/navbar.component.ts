@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,7 @@ import {Router} from "@angular/router";
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent{
-  constructor(public router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(public router: Router, private cdr: ChangeDetectorRef,public authService:AuthService) {}
 
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
@@ -17,5 +18,9 @@ export class NavbarComponent{
     this.router.navigateByUrl(route).then(() => {
       this.cdr.detectChanges();
     });
+  }
+
+  handleLogout() {
+    this.authService.logout()
   }
 }

@@ -34,6 +34,9 @@ export class CustomersComponent implements OnInit{
   }
 
   handleDeleteCustomer(id: number) {
+    let conf = confirm("Do you really want to delete this customer ?");
+    if(!conf)return;
+
     this.customerService.deleteCustomer(id).subscribe({
       next:value => {
         this.customers = this.customers.pipe(map(customers => customers.filter(customer => customer.id!=id)))
@@ -44,7 +47,7 @@ export class CustomersComponent implements OnInit{
   }
 
   handleCustomerAccounts(customer : Customer) {
-    this.router.navigateByUrl("/customer-accounts/"+customer.id,{
+    this.router.navigateByUrl("/admin/customer-accounts/"+customer.id,{
       state:customer
     })
   }
