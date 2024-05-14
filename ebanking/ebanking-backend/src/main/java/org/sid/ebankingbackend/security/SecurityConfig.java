@@ -1,7 +1,6 @@
 package org.sid.ebankingbackend.security;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import org.sid.ebankingbackend.entities.Customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +29,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -41,17 +39,17 @@ public class SecurityConfig {
     private String secretKey;
 
     @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+//    @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(){
         PasswordEncoder passwordEncoder = passwordEncoder();
         return new InMemoryUserDetailsManager(
                 User.withUsername("user1").password(passwordEncoder.encode("12345")).roles("USER").build(),
                 User.withUsername("admin").password(passwordEncoder.encode("12345")).roles("USER","ADMIN").build()
         );
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 
     @Bean

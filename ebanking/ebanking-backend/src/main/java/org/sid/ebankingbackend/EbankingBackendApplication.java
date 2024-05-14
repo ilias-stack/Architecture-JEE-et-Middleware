@@ -1,15 +1,12 @@
 package org.sid.ebankingbackend;
 
 import org.sid.ebankingbackend.dtos.BankAccountDTO;
-import org.sid.ebankingbackend.dtos.CustomerDTO;
 import org.sid.ebankingbackend.entities.AccountOperation;
 import org.sid.ebankingbackend.entities.CurrentAccount;
 import org.sid.ebankingbackend.entities.Customer;
 import org.sid.ebankingbackend.entities.SavingAccount;
 import org.sid.ebankingbackend.enums.AccountStatus;
 import org.sid.ebankingbackend.enums.OperationType;
-import org.sid.ebankingbackend.exceptions.BalanceNotSufficientException;
-import org.sid.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.sid.ebankingbackend.exceptions.CustomerNotFoundException;
 import org.sid.ebankingbackend.repositories.AccountOperationRepository;
 import org.sid.ebankingbackend.repositories.BankAccountRepository;
@@ -18,7 +15,6 @@ import org.sid.ebankingbackend.service.BankAccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
 import java.util.List;
@@ -36,10 +32,11 @@ public class EbankingBackendApplication {
     CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
         return args -> {
             Stream.of("Hassan","Image","Mohammed").forEach(name -> {
-                CustomerDTO c = new CustomerDTO();
+                Customer c = new Customer();
                 c.setName(name);
                 c.setEmail(name.trim()+"@mail.com");
-                bankAccountService.saveCustomer(c);
+                c.setPassword(name);
+                bankAccountService.registerCustomer(c);
             });
             bankAccountService.listCustomers().forEach(customer -> {
                 try {

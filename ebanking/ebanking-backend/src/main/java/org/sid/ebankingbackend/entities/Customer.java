@@ -16,7 +16,10 @@ import java.util.List;
 public class Customer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name,email;
+    @Column(unique = true)
+    private String email;
+    private String name,password;
+    private String roles="USER";
     @OneToMany(mappedBy = "customer")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<BankAccount> bankAccounts;

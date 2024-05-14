@@ -15,6 +15,7 @@ import org.sid.ebankingbackend.repositories.BankAccountRepository;
 import org.sid.ebankingbackend.repositories.CustomerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +33,26 @@ public class BankAccountServiceImpl implements BankAccountService{
     private BankAccountRepository bankAccountRepository;
     private AccountOperationRepository accountOperationRepository;
     private BankAccountMapperImpl mapper;
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.info("Saving new Customer");
         Customer customer = mapper.fromCustomerDTO(customerDTO);
         return mapper.fromCustomer(customerRepository.save(customer));
+    }
+
+    @Override
+    public CustomerDTO registerCustomer(Customer customer) {
+        Customer existingCustomer = customerRepository.findByEmail(customer.getEmail());
+        if (existingCustomer == null) {
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+            Customer savedCustomer = customerRepository.save(customer);
+            return mapper.fromCustomer(savedCustomer);
+        } else {
+            throw new RuntimeException("Customer with email: " + customer.getEmail() + " already exists.");
+        }
     }
 
     @Override
