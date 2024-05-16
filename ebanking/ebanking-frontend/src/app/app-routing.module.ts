@@ -9,6 +9,7 @@ import {AdminTemplateComponent} from "./admin-template/admin-template.component"
 import {AuthenticationGuard} from "./guards/authentication.guard";
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {NotAuthorizedComponent} from "./not-authorized/not-authorized.component";
+import {RegisterComponent} from "./register/register.component";
 
 const routes: Routes = [
   {path:"login",component:LoginComponent},
@@ -19,8 +20,8 @@ const routes: Routes = [
       {path:"customer-accounts/:id",component:CustomerAccountsComponent},
       {path:"notAuth",component:NotAuthorizedComponent}
     ],canActivate:[AuthenticationGuard] },
-  {path:"",redirectTo:"/login", pathMatch:"full"}
-
+  {path:"",redirectTo:"/admin", pathMatch:"full"},
+  {path:"register",component:RegisterComponent}
 ];
 
 @NgModule({

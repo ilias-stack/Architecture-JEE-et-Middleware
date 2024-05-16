@@ -10,7 +10,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(req.url.includes("/login")) return next.handle(req);
+    if(req.url.includes("/login") || req.url.includes("/auth/register")) return next.handle(req);
 
     const request = req.clone({
       headers: req.headers.set('Authorization','Bearer '+this.authService.accessToken)

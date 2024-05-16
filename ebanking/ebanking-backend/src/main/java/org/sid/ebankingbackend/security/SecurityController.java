@@ -1,5 +1,8 @@
 package org.sid.ebankingbackend.security;
 
+import org.sid.ebankingbackend.dtos.CustomerDTO;
+import org.sid.ebankingbackend.entities.Customer;
+import org.sid.ebankingbackend.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,13 +13,11 @@ import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,9 @@ public class SecurityController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private BankAccountService bankAccountService;
 
     @Autowired
     private JwtEncoder jwtEncoder;
@@ -56,5 +60,15 @@ public class SecurityController {
         return Map.of("access-token",jwtToken);
     }
 
+    @PostMapping("/register")
+    public Map<String, String> register(String name,String email,String password){
+        Customer customer = new Customer();
+        customer.setPassword(password);
+        customer.setName(name);
+        customer.setEmail(email);
+        System.out.println(bankAccountService.registerCustomer(customer));
+
+        return login(email,password);
+    }
 
 }

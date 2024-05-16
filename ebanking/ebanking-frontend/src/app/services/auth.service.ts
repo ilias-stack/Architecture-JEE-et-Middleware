@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {jwtDecode} from "jwt-decode";
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,23 @@ export class AuthService {
       new HttpParams().set("username",username).set("password",password)
 
     return this.http.post("http://localhost:8085/auth/login",params,options)
+  }
+
+  public register(username: string, email: string, password: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
+    });
+
+    const body = new HttpParams()
+      .set('name', username)
+      .set('email', email)
+      .set('password', password);
+
+    console.log('Request Headers:', headers);
+    console.log('Request Body:', body.toString());
+
+    return this.http.post("http://localhost:8085/auth/register", body.toString(), { headers });
   }
 
   loadProfile(data: any) {
